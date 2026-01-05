@@ -62,6 +62,7 @@ public class Program {
 				}
 					
 				case 0->{
+					fecharConexao();
 					System.out.println("Encerrando Programa...");
 					break;
 				}
@@ -164,6 +165,7 @@ public class Program {
 	private static void buscarNome() {
 		try {
 			conn = DB.getConnection();
+			sc.nextLine();
 			System.out.print("Nome:");
 			String name = sc.nextLine();
 			ps = conn.prepareStatement("select * from cliente where nome = ?");
@@ -207,6 +209,7 @@ public class Program {
 			}else if(op == 'd') {
 				System.out.print("Qual o id? ");
 				int id = sc.nextInt();
+				sc.nextLine();
 				System.out.print("Data de nascimento: ");
 				String dt = sc.nextLine();
 				
@@ -266,9 +269,6 @@ public class Program {
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
-		}finally {
-			DB.closeStatement(ps);
-			DB.closeConnection();
 		}
 		
 	}
@@ -292,11 +292,14 @@ public class Program {
 			
 		}catch(SQLException e) {
 			throw new DbIntegrityException(e.getMessage());
-		}finally {
-			DB.closeStatement(ps);
-			DB.closeConnection();
 		}
 			
 	}
 	
+	private static void fecharConexao() {
+		DB.closeStatement(st);
+		DB.closeStatement(ps);
+		DB.closeResultSet(rs);
+		DB.closeConnection();
+	}
 }
